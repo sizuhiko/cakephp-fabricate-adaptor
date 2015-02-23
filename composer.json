@@ -1,5 +1,5 @@
 {
-    "name": "sizuhiko/CakeFabricate",
+    "name": "sizuhiko/cake_fabricate",
     "description": "CakeFabricate plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {

@@ -13,7 +13,7 @@
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <testsuite name="CakeFabricate Test Suite">
+        <testsuite name="cake_fabricate Test Suite">
             <directory>./tests/TestCase</directory>
         </testsuite>
     </testsuites>
