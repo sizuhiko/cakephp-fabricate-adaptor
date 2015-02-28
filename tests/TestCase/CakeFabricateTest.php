@@ -1,6 +1,7 @@
 <?php
 namespace CakeFabricate\Test;
 
+use CakeFabricate\Adaptor\CakeFabricateAdaptor;
 use CakeFabricate\Test\App\Model\Table\PostsTable;
 use CakeFabricate\Test\App\Model\Table\UsersTable;
 
@@ -18,6 +19,9 @@ class CakeFabricateTest extends TestCase {
     public function setUp() {
         parent::setUp();
         Fabricate::clear();
+        Fabricate::config(function($config) {
+            $config->adaptor = new CakeFabricateAdaptor();
+        });
     }
 
     public function testAttributesFor() {
@@ -103,7 +107,7 @@ class CakeFabricateTest extends TestCase {
             ];
         });
 
-        $user = TableRegistry::get('Users')->find('first')->contain(['Post']);
+        $user = TableRegistry::get('Users')->find('all')->contain(['Post'])->first();
         $this->assertEquals('taro', $user->user);
         $this->assertCount(3, $user->posts);
     }
