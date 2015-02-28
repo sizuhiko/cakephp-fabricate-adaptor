@@ -25,7 +25,7 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
     public function getModel($modelName)
     {
         $model = new FabricateModel($modelName);
-        $table = TableRegistry::get(Inflector::pluralize($modelName));
+        $table = TableRegistry::get($modelName);
         $schema = $table->schema();
         foreach ($schema->columns() as $name) {
             $attrs = $schema->column($name);
@@ -41,8 +41,8 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
         foreach ($table->associations()->keys() as $key) {
             $association = $table->associations()->get($key);
             $target = $association->target();
-            list($nameSpace, $className) = namespaceSplit(get_class($target));
-            $alias = Inflector::singularize($target->alias());
+            $className = get_class($target);
+            $alias = $target->alias();
             switch ($association->type()) {
                 case Association::ONE_TO_ONE:
                     $model->hasOne($alias, $association->foreignKey(), $className);
@@ -63,13 +63,13 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
      */
     public function create($modelName, $attributes, $recordCount)
     {
-        $table = TableRegistry::get(Inflector::pluralize($modelName));
-        $entities = $table->newEntity($attributes);
-        if ($recordCount == 1) {
-            $entities = [$entities];
-        }
+        $table = TableRegistry::get($modelName);
+        $entities = $table->newEntities($attributes);
         foreach ($entities as $entity) {
-            $table->save($entity);
+            $ret = $table->save($entity);
+            if(!$ret) {
+                var_dump($entity);
+            }
         }
         return $entities;
     }
@@ -79,8 +79,7 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
      */
     public function build($modelName, $data)
     {
-        $table = TableRegistry::get(Inflector::pluralize($modelName));
-var_dump($data);
+        $table = TableRegistry::get($modelName);
         $entity = $table->newEntity($data);
         return $entity;
     }

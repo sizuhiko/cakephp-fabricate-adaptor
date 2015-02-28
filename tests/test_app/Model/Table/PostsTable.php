@@ -24,8 +24,8 @@ class PostsTable extends Table
         $this->displayField('title');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
-        $this->belongsTo('Authors', [
-            'className' => 'Users',
+        $this->belongsTo('Author', [
+            'className' => 'CakeFabricate\Test\App\Model\Table\UsersTable',
             'foreignKey' => 'author_id',
             'propertyName' => 'author'
         ]);

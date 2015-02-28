@@ -25,7 +25,7 @@ class CakeFabricateTest extends TestCase {
     }
 
     public function testAttributesFor() {
-        $results = Fabricate::attributes_for('Post', 10, function($data){
+        $results = Fabricate::attributes_for('Posts', 10, function($data){
             return ["created" => "2013-10-09 12:40:28", "updated" => "2013-10-09 12:40:28"];
         });
         $this->assertCount(10, $results);
@@ -41,10 +41,10 @@ class CakeFabricateTest extends TestCase {
     }
 
     public function testBuild() {
-        $result = Fabricate::build('Post', function($data){
+        $result = Fabricate::build('Posts', function($data){
             return ["created" => "2013-10-09 12:40:28", "updated" => "2013-10-09 12:40:28"];
         });
-        $this->assertInstanceOf('Post', $result);
+        $this->assertInstanceOf('CakeFabricate\Test\App\Model\Entity\Post', $result);
         $this->assertEquals(1, $result->id);
         $this->assertEquals(1, $result->author_id);
         $this->assertEquals(50, strlen($result->title));
@@ -55,7 +55,7 @@ class CakeFabricateTest extends TestCase {
     }
 
     public function testCreate() {
-        Fabricate::create('Post', 10, function($data){
+        Fabricate::create('Posts', 10, function($data){
             return ["created" => "2013-10-09 12:40:28", "updated" => "2013-10-09 12:40:28"];
         });
         $posts = TableRegistry::get('Posts')->find('all');
@@ -73,63 +73,64 @@ class CakeFabricateTest extends TestCase {
     }
 
     public function testSaveWithAssociation() {
-        Fabricate::create('User', function($data, $world) {
+        Fabricate::create('Users', function($data, $world) {
             return [
                 'user' => 'taro',
-                'Post' => $world->association('Post', 3, ['id'=>false,'author_id'=>false]),
+                'posts' => $world->association('Posts', 3, ['author_id'=>false]),
             ];
         });
 
-        $user = TableRegistry::get('Users')->find('first')->contain(['Post']);
+        // TableRegistry::get('Users')->connection()->logQueries(true);
+        $user = TableRegistry::get('Users')->find('all')->contain(['Posts'])->first();
         $this->assertEquals('taro', $user->user);
         $this->assertCount(3, $user->posts);
     }
 
     public function testSaveWithDefinedAssociation() {
-        Fabricate::define(['PublishedPost', 'class'=>'Post'], ['published'=>'1']);
-        Fabricate::create('User', function($data, $world) {
+        Fabricate::define(['PublishedPost', 'class'=>'Posts'], ['published'=>'1']);
+        Fabricate::create('Users', function($data, $world) {
             return [
                 'user' => 'taro',
-                'Post' => $world->association(['PublishedPost', 'association'=>'Post'], 3, ['id'=>false,'author_id'=>false]),
+                'posts' => $world->association(['PublishedPost', 'association'=>'Posts'], 3, ['author_id'=>false]),
             ];
         });
 
-        $user = TableRegistry::get('Users')->find('first')->contain(['Post']);
+        $user = TableRegistry::get('Users')->find('all')->contain(['Posts'])->first();
         $this->assertEquals('taro', $user->user);
         $this->assertCount(3, $user->posts);
     }
 
     public function testSaveWithBelongsToAssociation() {
-        Fabricate::define(['PublishedPost', 'class'=>'Post'], ['published'=>'1']);
+        Fabricate::define(['PublishedPost', 'class'=>'Posts'], ['published'=>'1']);
         Fabricate::create('PublishedPost', 3, function($data, $world) {
             return [
-                'Author' => $world->association(['User', 'association'=>'Author'], ['id'=>1,'user'=>'taro']),
+                'author' => $world->association(['Users', 'association'=>'Author'], ['id'=>1,'user'=>'taro']),
             ];
         });
 
-        $user = TableRegistry::get('Users')->find('all')->contain(['Post'])->first();
+        $user = TableRegistry::get('Users')->find('all')->contain(['Posts'])->first();
         $this->assertEquals('taro', $user->user);
         $this->assertCount(3, $user->posts);
     }
 
     public function testDefineAndAssociationAndTraits() {
         Fabricate::define(['trait'=>'published'], ['published'=>'1']);
-        Fabricate::define(['PublishedPost', 'class'=>'Post'], function($data, $world) {
+        Fabricate::define(['PublishedPost', 'class'=>'Posts'], function($data, $world) {
             $world->traits('published');
             return ['title'=>$world->sequence('title',function($i) { return "Title{$i}"; })];
         });
-        Fabricate::create('User', function($data, $world) {
+        Fabricate::create('Users', function($data, $world) {
             return [
                 'user' => 'taro',
-                'Post' => Fabricate::association('PublishedPost', 3, ['id'=>false,'author_id'=>false]),
+                'posts' => Fabricate::association('PublishedPost', 3, ['author_id'=>false]),
             ];
         });
 
-        $user = TableRegistry::get('Users')->find('first')->contain(['Post']);
+        $user = TableRegistry::get('Users')->find('all')->contain(['Posts'])->first();
         $this->assertEquals('taro', $user->user);
         $this->assertCount(3, $user->posts);
-        $this->assertEquals(['1','1','1'], array_map(function($post) { return $post->publichsed; }));
-        $this->assertEquals(['Title1','Title2','Title3'], array_map(function($post) { return $post->title; }));
+        $this->assertEquals(['1','1','1'], array_map(function($post) { return $post->published; }, $user->posts));
+        $this->assertEquals(['Title1','Title2','Title3'], array_map(function($post) { return $post->title; }, $user->posts));
     }
 
 }

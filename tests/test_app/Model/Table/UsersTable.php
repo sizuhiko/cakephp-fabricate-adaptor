@@ -25,7 +25,7 @@ class UsersTable extends Table
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
         $this->hasMany('Posts', [
-            'className' => 'Posts',
+            'className' => 'CakeFabricate\Test\App\Model\Table\PostsTable',
             'foreignKey' => 'author_id',
             'propertyName' => 'posts'
         ]);
@@ -42,10 +42,10 @@ class UsersTable extends Table
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('id', 'create')
-            ->requirePresence('title', 'create')
-            ->notEmpty('title')
-            ->requirePresence('body', 'create')
-            ->notEmpty('body');
+            ->requirePresence('user', 'create')
+            ->notEmpty('user')
+            ->requirePresence('password', 'create')
+            ->notEmpty('password');
 
         return $validator;
     }

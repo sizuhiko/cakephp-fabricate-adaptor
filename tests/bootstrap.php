@@ -9,6 +9,7 @@
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Cache\Cache;
 use Cake\Datasource\ConnectionManager;
 
 $findRoot = function ($root) {
@@ -36,10 +37,27 @@ define('TMP', sys_get_temp_dir() . DS);
 
 Configure::write('debug', true);
 Configure::write('App', [
-    'namespace' => 'App',
+    'namespace' => 'CakeFabricate\Test\App',
     'paths' => [
         'plugins' => [ROOT . 'Plugin' . DS],
         'templates' => [ROOT . 'App' . DS . 'Template' . DS]
+    ]
+]);
+Cache::config([
+    '_cake_core_' => [
+        'engine' => 'File',
+        'prefix' => 'cake_core_',
+        'serialize' => true
+    ],
+    '_cake_model_' => [
+        'engine' => 'File',
+        'prefix' => 'cake_model_',
+        'serialize' => true
+    ],
+    'default' => [
+        'engine' => 'File',
+        'prefix' => 'default_',
+        'serialize' => true
     ]
 ]);
 

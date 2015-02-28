@@ -18,7 +18,7 @@
     "autoload-dev": {
         "psr-4": {
             "CakeFabricate\\Test\\": "tests",
-            "CakeFabricate\\Test\\App\\": "tests/test_app/App",
+            "CakeFabricate\\Test\\App\\": "tests/test_app",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }
