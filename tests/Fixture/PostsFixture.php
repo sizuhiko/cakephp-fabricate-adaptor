@@ -18,7 +18,7 @@ class PostsFixture extends TestFixture {
     public $fields = [
         'id' =>        ['type' => 'integer', 'key' => 'primary'],
         'author_id' => ['type' => 'integer', 'null' => false],
-        'title' =>     ['type' => 'string', 'null' => false],
+        'title' =>     ['type' => 'string', 'null' => false, 'length' => 50],
         'body' =>      'text',
         'published' => ['type' => 'string', 'length' => 1, 'default' => 'N'],
         'created' =>   'datetime',

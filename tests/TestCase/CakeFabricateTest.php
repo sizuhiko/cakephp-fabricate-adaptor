@@ -50,8 +50,8 @@ class CakeFabricateTest extends TestCase {
         $this->assertEquals(50, strlen($result->title));
         $this->assertNotEmpty($result->body);
         $this->assertEquals(1, strlen($result->published));
-        $this->assertEquals('2013-10-09 12:40:28', $result->created);
-        $this->assertEquals('2013-10-09 12:40:28', $result->updated);
+        $this->assertEquals('2013-10-09 12:40:28', $result->created->i18nFormat('YYYY-MM-dd HH:mm:ss'));
+        $this->assertEquals('2013-10-09 12:40:28', $result->updated->i18nFormat('YYYY-MM-dd HH:mm:ss'));
     }
 
     public function testCreate() {
@@ -67,8 +67,8 @@ class CakeFabricateTest extends TestCase {
             $this->assertEquals(50, strlen($post->title));
             $this->assertNotEmpty($post->body);
             $this->assertEquals(1, strlen($post->published));
-            $this->assertEquals('2013-10-09 12:40:28', $post->created);
-            $this->assertEquals('2013-10-09 12:40:28', $post->updated);
+            $this->assertEquals('2013-10-09 12:40:28', $post->created->i18nFormat('YYYY-MM-dd HH:mm:ss'));
+            $this->assertEquals('2013-10-09 12:40:28', $post->updated->i18nFormat('YYYY-MM-dd HH:mm:ss'));
         }
     }
 
