@@ -32,7 +32,7 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
     const OPTION_VALIDATE = "validate";
 
     /** option values */
-    private $_options;
+    private $options;
 
     /**
      * Constructor
@@ -44,7 +44,7 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
             self::OPTION_FILTER_KEY => false,
             self::OPTION_VALIDATE   => false,
         ];
-        $this->_options = array_merge($defaults, $options);
+        $this->options = array_merge($defaults, $options);
     }
 
     /**
@@ -95,11 +95,11 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
     public function create($modelName, $attributes, $recordCount)
     {
         $table = TableRegistry::get($modelName);
-        $entities = $table->newEntities($attributes, ['validate' => $this->_options[self::OPTION_VALIDATE]]);
+        $entities = $table->newEntities($attributes, ['validate' => $this->options[self::OPTION_VALIDATE]]);
         $table->connection()->transactional(function () use ($table, $entities) {
             foreach ($entities as $entity) {
                 $ret = $table->save($entity);
-                if(!$ret) {
+                if (!$ret) {
                     return false;
                 }
             }
@@ -114,8 +114,8 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
     public function build($modelName, $data)
     {
         $table = TableRegistry::get($modelName);
-        var_dump($this->_options);
-        $entity = $table->newEntity($data, ['validate' => $this->_options[self::OPTION_VALIDATE]]);
+        var_dump($this->options);
+        $entity = $table->newEntity($data, ['validate' => $this->options[self::OPTION_VALIDATE]]);
         return $entity;
     }
 
@@ -125,8 +125,9 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
      * @param string $name field name
      * @return true if $name is primary key, otherwise false
      */
-    protected function filterKey($table, $name) {
-        if (!$this->_options[self::OPTION_FILTER_KEY]) {
+    protected function filterKey($table, $name)
+    {
+        if (!$this->options[self::OPTION_FILTER_KEY]) {
             return false;
         }
         $primaryKey = $table->primaryKey();
