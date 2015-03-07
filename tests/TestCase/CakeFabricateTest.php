@@ -54,6 +54,17 @@ class CakeFabricateTest extends TestCase {
         $this->assertEquals('2013-10-09 12:40:28', $result->updated->i18nFormat('YYYY-MM-dd HH:mm:ss'));
     }
 
+    public function testBuildErrorIfValidateTrue() {
+        Fabricate::config(function($config) {
+            $config->adaptor = new CakeFabricateAdaptor([CakeFabricateAdaptor::OPTION_VALIDATE => true]);
+        });
+        $result = Fabricate::build('Posts', function($data){
+            return ["title" => ""];
+        });
+        var_dump($result);
+        $this->assertArrayHasKey('title', $result->errors());
+    }
+
     public function testCreate() {
         Fabricate::create('Posts', 10, function($data){
             return ["created" => "2013-10-09 12:40:28", "updated" => "2013-10-09 12:40:28"];
@@ -70,6 +81,29 @@ class CakeFabricateTest extends TestCase {
             $this->assertEquals('2013-10-09 12:40:28', $post->created->i18nFormat('YYYY-MM-dd HH:mm:ss'));
             $this->assertEquals('2013-10-09 12:40:28', $post->updated->i18nFormat('YYYY-MM-dd HH:mm:ss'));
         }
+    }
+
+    public function testAttributeForAutoPrimaryKey() {
+        Fabricate::config(function($config) {
+            $config->adaptor = new CakeFabricateAdaptor([CakeFabricateAdaptor::OPTION_FILTER_KEY => true]);
+        });
+        $results = Fabricate::attributes_for('Posts', function($data){
+            return ["created" => "2013-10-09 12:40:28", "updated" => "2013-10-09 12:40:28"];
+        });
+        $this->assertArrayNotHasKey('id', $results);
+    }
+
+    public function testCreateAutoPrimaryKey() {
+        Fabricate::config(function($config) {
+            $config->adaptor = new CakeFabricateAdaptor([CakeFabricateAdaptor::OPTION_FILTER_KEY => true]);
+        });
+        Fabricate::create('Posts', function($data){
+            return ["created" => "2013-10-09 12:40:28", "updated" => "2013-10-09 12:40:28"];
+        });
+        $posts = TableRegistry::get('Posts')->find('all');
+
+        $this->assertCount(1, $posts);
+        $this->assertEquals(1, $posts->first()->id);
     }
 
     public function testSaveWithAssociation() {

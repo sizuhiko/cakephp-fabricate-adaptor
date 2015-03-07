@@ -20,6 +20,34 @@ use Cake\ORM\Association;
 class CakeFabricateAdaptor extends AbstractFabricateAdaptor
 {
     /**
+     * Filter primary key option.
+     * Default setting is false that primary key sets by Fabricate.
+     */
+    const OPTION_FILTER_KEY = "filter_key";
+    /**
+     * Validate option.
+     * Default setting is false.
+     * If you want to validate each entity, set true.
+     */
+    const OPTION_VALIDATE = "validate";
+
+    /** option values */
+    private $_options;
+
+    /**
+     * Constructor
+     * @param array $options CakeFabricateAdaptor options
+     */
+    public function __construct($options = [])
+    {
+        $defaults = [
+            self::OPTION_FILTER_KEY => false,
+            self::OPTION_VALIDATE   => false,
+        ];
+        $this->_options = array_merge($defaults, $options);
+    }
+
+    /**
      * @inherit
      */
     public function getModel($modelName)
@@ -28,6 +56,9 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
         $table = TableRegistry::get($modelName);
         $schema = $table->schema();
         foreach ($schema->columns() as $name) {
+            if ($this->filterKey($table, $name)) {
+                continue;
+            }
             $attrs = $schema->column($name);
             $options = [];
             if (array_key_exists('length', $attrs)) {
@@ -64,13 +95,16 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
     public function create($modelName, $attributes, $recordCount)
     {
         $table = TableRegistry::get($modelName);
-        $entities = $table->newEntities($attributes);
-        foreach ($entities as $entity) {
-            $ret = $table->save($entity);
-            if(!$ret) {
-                var_dump($entity);
+        $entities = $table->newEntities($attributes, ['validate' => $this->_options[self::OPTION_VALIDATE]]);
+        $table->connection()->transactional(function () use ($table, $entities) {
+            foreach ($entities as $entity) {
+                $ret = $table->save($entity);
+                if(!$ret) {
+                    return false;
+                }
             }
-        }
+            return true;
+        });
         return $entities;
     }
 
@@ -80,7 +114,25 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
     public function build($modelName, $data)
     {
         $table = TableRegistry::get($modelName);
-        $entity = $table->newEntity($data);
+        var_dump($this->_options);
+        $entity = $table->newEntity($data, ['validate' => $this->_options[self::OPTION_VALIDATE]]);
         return $entity;
+    }
+
+    /**
+     * Filter key
+     *
+     * @param string $name field name
+     * @return true if $name is primary key, otherwise false
+     */
+    protected function filterKey($table, $name) {
+        if (!$this->_options[self::OPTION_FILTER_KEY]) {
+            return false;
+        }
+        $primaryKey = $table->primaryKey();
+        if (!is_array($primaryKey)) {
+            $primaryKey = [$primaryKey];
+        }
+        return in_array($name, $primaryKey);
     }
 }

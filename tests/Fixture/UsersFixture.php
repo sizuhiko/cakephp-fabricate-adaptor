@@ -16,10 +16,13 @@ class UsersFixture extends TestFixture {
  * @var array
  */
     public $fields = [
-        'id' =>       ['type' => 'integer', 'key' => 'primary'],
+        'id' =>       ['type' => 'integer', 'key' => 'primary', 'autoIncrement' => true],
         'user' =>     ['type' => 'string', 'null' => true],
         'password' => ['type' => 'string', 'null' => true],
         'created' => 'datetime',
-        'updated' => 'datetime'
+        'updated' => 'datetime',
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+        ],
     ];
 }

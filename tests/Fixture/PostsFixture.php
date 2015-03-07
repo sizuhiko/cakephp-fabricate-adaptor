@@ -16,12 +16,15 @@ class PostsFixture extends TestFixture {
  * @var array
  */
     public $fields = [
-        'id' =>        ['type' => 'integer', 'key' => 'primary'],
+        'id' =>        ['type' => 'integer', 'key' => 'primary', 'autoIncrement' => true],
         'author_id' => ['type' => 'integer', 'null' => false],
         'title' =>     ['type' => 'string', 'null' => false, 'length' => 50],
         'body' =>      'text',
         'published' => ['type' => 'string', 'length' => 1, 'default' => 'N'],
         'created' =>   'datetime',
-        'updated' =>   'datetime'
+        'updated' =>   'datetime',
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+        ],
     ];
 }
