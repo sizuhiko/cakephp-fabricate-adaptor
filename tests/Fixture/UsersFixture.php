@@ -17,7 +17,7 @@ class UsersFixture extends TestFixture {
  */
     public $fields = [
         'id' =>       ['type' => 'integer', 'key' => 'primary', 'autoIncrement' => true],
-        'user' =>     ['type' => 'string', 'null' => true],
+        'username' => ['type' => 'string', 'null' => true],
         'password' => ['type' => 'string', 'null' => true],
         'created' => 'datetime',
         'updated' => 'datetime',

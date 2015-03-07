@@ -21,7 +21,7 @@ class UsersTable extends Table
     public function initialize(array $config)
     {
         $this->table('users');
-        $this->displayField('user');
+        $this->displayField('username');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
         $this->hasMany('Posts', [
@@ -42,8 +42,8 @@ class UsersTable extends Table
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('id', 'create')
-            ->requirePresence('user', 'create')
-            ->notEmpty('user')
+            ->requirePresence('username', 'create')
+            ->notEmpty('username')
             ->requirePresence('password', 'create')
             ->notEmpty('password');
 
