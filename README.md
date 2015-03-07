@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/sizuhiko/cakephp-fabricate-adaptor.svg?branch=master)](https://travis-ci.org/sizuhiko/Fabricate) [![Coverage Status](https://coveralls.io/repos/sizuhiko/cakephp-fabricate-adaptor/badge.svg?branch=master)](https://coveralls.io/r/sizuhiko/cakephp-fabricate-adaptor?branch=master) [![Total Downloads](https://poser.pugx.org/sizuhiko/cake_fabricate/downloads.svg)](https://packagist.org/packages/sizuhiko/cake_fabricate) [![Latest Stable Version](https://poser.pugx.org/sizuhiko/cake_fabricate/v/stable.svg)](https://packagist.org/packages/sizuhiko/cake_fabricate)
+
+
 # CakeFabricate plugin for CakePHP
 
 CakeFabricate is adaptor for [Fabricate](https://github.com/sizuhiko/Fabricate/tree/v2), and integrate Fabricate(version 2) to CakePHP3.
