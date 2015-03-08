@@ -61,7 +61,6 @@ class CakeFabricateTest extends TestCase {
         $result = Fabricate::build('Posts', function($data){
             return ["title" => ""];
         });
-        var_dump($result);
         $this->assertArrayHasKey('title', $result->errors());
     }
 

@@ -114,7 +114,6 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
     public function build($modelName, $data)
     {
         $table = TableRegistry::get($modelName);
-        var_dump($this->options);
         $entity = $table->newEntity($data, ['validate' => $this->options[self::OPTION_VALIDATE]]);
         return $entity;
     }
