@@ -105,7 +105,10 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
         $entities = $table->newEntities($attributes, ['validate' => $this->options[self::OPTION_VALIDATE]]);
         $table->connection()->transactional(function () use ($table, $entities) {
             foreach ($entities as $entity) {
-                $ret = $table->save($entity, ['checkRules' => $this->options[self::OPTION_CHECK_RULES], 'atomic' => false]);
+                $ret = $table->save($entity, [
+                    'checkRules' => $this->options[self::OPTION_CHECK_RULES],
+                    'atomic' => false
+                ]);
                 if (!$ret) {
                     return false;
                 }
