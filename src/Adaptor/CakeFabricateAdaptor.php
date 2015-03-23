@@ -30,6 +30,12 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
      * If you want to validate each entity, set true.
      */
     const OPTION_VALIDATE = "validate";
+    /**
+     * Application rles option.
+     * Default setting is false.
+     * If you want to check rules for each entity, set true.
+     */
+    const OPTION_CHECK_RULES = "checkRules";
 
     /** option values */
     private $options;
@@ -43,6 +49,7 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
         $defaults = [
             self::OPTION_FILTER_KEY => false,
             self::OPTION_VALIDATE   => false,
+            self::OPTION_CHECK_RULES      => false,
         ];
         $this->options = array_merge($defaults, $options);
     }
@@ -98,7 +105,10 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
         $entities = $table->newEntities($attributes, ['validate' => $this->options[self::OPTION_VALIDATE]]);
         $table->connection()->transactional(function () use ($table, $entities) {
             foreach ($entities as $entity) {
-                $ret = $table->save($entity);
+                $ret = $table->save($entity, [
+                    'checkRules' => $this->options[self::OPTION_CHECK_RULES],
+                    'atomic' => false
+                ]);
                 if (!$ret) {
                     return false;
                 }
