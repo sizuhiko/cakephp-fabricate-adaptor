@@ -29,7 +29,7 @@ class CakeFabricateTest extends TestCase {
             return ["created" => "2013-10-09 12:40:28", "updated" => "2013-10-09 12:40:28"];
         });
         $this->assertCount(10, $results);
-        for ($i = 0; $i < 10; $i++) { 
+        for ($i = 0; $i < 10; $i++) {
             $this->assertEquals($i+1, $results[$i]['id']);
             $this->assertEquals($i+1, $results[$i]['author_id']);
             $this->assertEquals(50, strlen($results[$i]['title']));
