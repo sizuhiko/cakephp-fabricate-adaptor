@@ -102,7 +102,7 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
     public function create($modelName, $attributes, $recordCount)
     {
         $table = TableRegistry::get($modelName);
-        $entities = $table->newEntities($attributes, ['validate' => $this->options[self::OPTION_VALIDATE]]);
+        $entities = $table->newEntities($attributes, ['validate' => $this->options[self::OPTION_VALIDATE], 'accessibleFields' => ['*' => true]]);
         $table->connection()->transactional(function () use ($table, $entities) {
             foreach ($entities as $entity) {
                 $ret = $table->save($entity, [
