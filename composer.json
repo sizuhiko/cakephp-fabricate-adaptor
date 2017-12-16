@@ -8,7 +8,7 @@
         "sizuhiko/fabricate": "~2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0"
     },
     "autoload": {
         "psr-4": {
