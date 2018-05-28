@@ -3,8 +3,8 @@
     "description": "CakeFabricate plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
-        "php": ">=5.4",
-        "cakephp/cakephp": "~3.0",
+        "php": ">=5.6",
+        "cakephp/cakephp": "~3.6",
         "sizuhiko/fabricate": "~2.0"
     },
     "require-dev": {

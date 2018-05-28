@@ -20,9 +20,9 @@ class UsersTable extends Table
      */
     public function initialize(array $config)
     {
-        $this->table('users');
-        $this->displayField('username');
-        $this->primaryKey('id');
+        $this->setTable('users');
+        $this->setDisplayField('username');
+        $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
         $this->hasMany('Posts', [
             'className' => 'CakeFabricate\Test\App\Model\Table\PostsTable',
