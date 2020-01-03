@@ -7,8 +7,8 @@
  * installed as a dependency of an application.
  */
 
+use CakeFabricate\Test\App\Application;
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\Cache\Cache;
 use Cake\Datasource\ConnectionManager;
 
@@ -66,6 +66,7 @@ if (!getenv('db_dsn')) {
 }
 ConnectionManager::setConfig('test', ['url' => getenv('db_dsn')]);
 
-Plugin::load('CakeFabricate', [
+$app = new Application(dirname(dirname(__FILE__)) . DS . 'config');
+$app->addPlugin('CakeFabricate', [
     'path' => dirname(dirname(__FILE__)) . DS,
 ]);
