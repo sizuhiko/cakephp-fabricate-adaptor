@@ -16,7 +16,7 @@ use Cake\TestSuite\TestCase;
 class CakeFabricateTest extends TestCase {
     public $fixtures = ['plugin.CakeFabricate.Posts', 'plugin.CakeFabricate.Users'];
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
         Fabricate::clear();
         Fabricate::config(function($config) {

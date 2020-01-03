@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace CakeFabricate\Test\App;
 
 use Cake\Http\BaseApplication;
+use Cake\Http\MiddlewareQueue;
 
 /**
  * Application setup class.
@@ -37,7 +38,8 @@ class Application extends BaseApplication
         parent::bootstrap();
     }
 
-    public function middleware($middlewareQueue)
+    public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
+        return $middlewareQueue;
     }
 }

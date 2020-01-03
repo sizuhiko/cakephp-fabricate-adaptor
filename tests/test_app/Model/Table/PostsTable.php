@@ -1,8 +1,6 @@
 <?php
 namespace CakeFabricate\Test\App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -18,7 +16,7 @@ class PostsTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->setTable('posts');
         $this->setDisplayField('title');
@@ -37,15 +35,15 @@ class PostsTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): Validator
     {
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('id', 'create')
+            ->allowEmptyString('id', 'create')
             ->requirePresence('title', 'create')
-            ->notEmpty('title')
+            ->notEmptyString('title')
             ->requirePresence('body', 'create')
-            ->notEmpty('body');
+            ->notEmptyString('body');
 
         return $validator;
     }
