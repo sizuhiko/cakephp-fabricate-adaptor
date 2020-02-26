@@ -3,7 +3,7 @@
 
 # CakeFabricate plugin for CakePHP
 
-CakeFabricate is adaptor for [Fabricate](https://github.com/sizuhiko/Fabricate/tree/v2), and integrate Fabricate(version 2) to CakePHP3.
+CakeFabricate is adaptor for [Fabricate](https://github.com/sizuhiko/Fabricate/tree/v2), and integrate Fabricate(version 2) to CakePHP4.
 
 ## Installation
 
@@ -64,7 +64,7 @@ see: CakePHP's Entity::newEntity()
 
 `Fabricate::attributes_for(:name, :number_of_generation, :array_or_callback)` generate only attributes.
 
-* name: Table class alias. For get table instance of CakePHP3, called `TableRegistry::get(:name);`.
+* name: Table class alias. For get table instance of CakePHP4, called `TableRegistry::get(:name);`.
 * number_of_generation: Generated number of records
 * array_or_callback: it can override each generated attributes
 
@@ -109,7 +109,7 @@ array (
 
 `Fabricate::build(:name, :array_or_callback)` generate a entity instance (using Table::newInstance).
 
-* name: Table class alias. For get table instance of CakePHP3, called `TableRegistry::get(:name);`.
+* name: Table class alias. For get table instance of CakePHP4, called `TableRegistry::get(:name);`.
 * array_or_callback: it can override each generated attributes
 
 #### Example
@@ -127,7 +127,7 @@ $result = Fabricate::build('Posts', function($data){
 
 `Fabricate::create(:name, :number_of_generation, :array_or_callback)` generate and save records to database.
 
-* name: Table class alias. For get table instance of CakePHP3, called `TableRegistry::get(:name);`.
+* name: Table class alias. For get table instance of CakePHP4, called `TableRegistry::get(:name);`.
 * number_of_generation: Generated number of records
 * array_or_callback: it can override each generated attributes
 
