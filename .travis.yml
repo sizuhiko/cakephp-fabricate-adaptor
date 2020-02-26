@@ -1,5 +1,9 @@
 language: php
 
+services:
+  - postgresql
+  - mysql
+
 php:
   - 5.6
   - 7.0
@@ -10,8 +14,8 @@ sudo: false
 
 env:
   matrix:
-    - DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
-    - DB=pgsql db_dsn='postgres://travis@127.0.0.1/cakephp_test'
+    - DB=mysql db_dsn='mysql://travis@127.0.0.1/cakephp_test'
+    - DB=pgsql db_dsn='postgres://postgres@127.0.0.1/cakephp_test'
 
   global:
     - DEFAULT=1
@@ -19,12 +23,10 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 7.0
-      env:
-        - PHPCS=1 DEFAULT=0
-    - php: 7.0
-      env:
-        - CODECOVERAGE=1 DEFAULT=0 DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
+    - php: 7.1
+      env: PHPCS=1 DEFAULT=0
+    - php: 7.1
+      env: CODECOVERAGE=1 DEFAULT=0 DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
 
 before_script:
   - composer self-update
