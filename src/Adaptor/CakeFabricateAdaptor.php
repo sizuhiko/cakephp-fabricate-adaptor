@@ -7,6 +7,7 @@
  */
 namespace CakeFabricate\Adaptor;
 
+use Cake\ORM\Locator\LocatorAwareTrait;
 use Fabricate\Adaptor\AbstractFabricateAdaptor;
 use Fabricate\Model\FabricateModel;
 
@@ -19,6 +20,8 @@ use Cake\ORM\Association;
  */
 class CakeFabricateAdaptor extends AbstractFabricateAdaptor
 {
+    use LocatorAwareTrait;
+
     /**
      * Filter primary key option.
      * Default setting is false that primary key sets by Fabricate.
@@ -60,13 +63,13 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
     public function getModel($modelName)
     {
         $model = new FabricateModel($modelName);
-        $table = TableRegistry::get($modelName);
-        $schema = $table->schema();
+        $table = $this->getTableLocator()->get($modelName);
+        $schema = $table->getSchema();
         foreach ($schema->columns() as $name) {
             if ($this->filterKey($table, $name)) {
                 continue;
             }
-            $attrs = $schema->column($name);
+            $attrs = $schema->getColumn($name);
             $options = [];
             if (array_key_exists('length', $attrs)) {
                 $options['limit'] = $attrs['length'];
@@ -78,18 +81,18 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
         }
         foreach ($table->associations()->keys() as $key) {
             $association = $table->associations()->get($key);
-            $target = $association->target();
+            $target = $association->getTarget();
             $className = get_class($target);
-            $alias = $target->alias();
+            $alias = $target->getAlias();
             switch ($association->type()) {
                 case Association::ONE_TO_ONE:
-                    $model->hasOne($alias, $association->foreignKey(), $className);
+                    $model->hasOne($alias, $association->getForeignKey(), $className);
                     break;
                 case Association::ONE_TO_MANY:
-                    $model->hasMany($alias, $association->foreignKey(), $className);
+                    $model->hasMany($alias, $association->getForeignKey(), $className);
                     break;
                 case Association::MANY_TO_ONE:
-                    $model->belongsTo($alias, $association->foreignKey(), $className);
+                    $model->belongsTo($alias, $association->getForeignKey(), $className);
                     break;
             }
         }
@@ -101,23 +104,15 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
      */
     public function create($modelName, $attributes, $recordCount)
     {
-        $table = TableRegistry::get($modelName);
+        $table = $this->getTableLocator()->get($modelName);
         $entities = $table->newEntities($attributes, [
             'validate' => $this->options[self::OPTION_VALIDATE],
             'accessibleFields' => ['*' => true]
         ]);
-        $table->connection()->transactional(function () use ($table, $entities) {
-            foreach ($entities as $entity) {
-                $ret = $table->save($entity, [
-                    'checkRules' => $this->options[self::OPTION_CHECK_RULES],
-                    'atomic' => false
-                ]);
-                if (!$ret) {
-                    return false;
-                }
-            }
-            return true;
-        });
+        $table->saveMany($entities, [
+            'checkRules' => $this->options[self::OPTION_CHECK_RULES],
+        ]);
+
         return $entities;
     }
 
@@ -126,7 +121,7 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
      */
     public function build($modelName, $data)
     {
-        $table = TableRegistry::get($modelName);
+        $table = $this->getTableLocator()->get($modelName);
         $entity = $table->newEntity($data, [
             'validate' => $this->options[self::OPTION_VALIDATE],
             'accessibleFields' => ['*' => true]
@@ -145,7 +140,7 @@ class CakeFabricateAdaptor extends AbstractFabricateAdaptor
         if (!$this->options[self::OPTION_FILTER_KEY]) {
             return false;
         }
-        $primaryKey = $table->primaryKey();
+        $primaryKey = $table->getPrimaryKey();
         if (!is_array($primaryKey)) {
             $primaryKey = [$primaryKey];
         }
