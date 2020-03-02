@@ -5,6 +5,8 @@
 
 CakeFabricate is adaptor for [Fabricate](https://github.com/sizuhiko/Fabricate/tree/v2), and integrate Fabricate(version 2) to CakePHP3.
 
+If you want use CakePHP4, please check [cakephp4 branch](https://github.com/sizuhiko/cakephp-fabricate-adaptor/tree/cakephp4).
+
 ## Installation
 
 You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
